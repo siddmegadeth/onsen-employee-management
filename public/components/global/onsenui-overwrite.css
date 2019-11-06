@@ -39,17 +39,17 @@ ons-search-input.ng-pristine.ng-valid.ng-not-empty.ng-touched {
 
 /*Toolbar*/
 ons-toolbar.toolbar.toolbar--material {
-    background: #b43998;
+    background: #E91E63;
 }
 
 .center.toolbar__center.toolbar__title.toolbar--material__center {
-    background: #b43998;
+    background: #E91E63;
     color: white;
 }
 
 
 .tabbar.ons-tabbar__footer.ons-swiper-tabbar.tabbar--material.tabbar--top {
-    background: #b43998;
+    background: #E91E63;
     color: white;
 }
 
