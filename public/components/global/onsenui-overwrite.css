@@ -1,0 +1,114 @@
+textarea.textarea.textarea--transparent {
+    width: 100%;
+}
+
+ons-search-input.ng-pristine.ng-valid.ng-empty.ng-touched {
+    width: 100%;
+}
+
+ons-search-input.ng-pristine.ng-untouched.ng-valid.ng-empty {
+    width: 100%;
+
+}
+
+ons-search-input.ng-pristine.ng-valid.ng-not-empty.ng-touched {
+    width: 100%;
+
+}
+
+.progress-bar--indeterminate:before {
+    background-color: #0076ff !important;
+}
+
+.progress-bar--indeterminate {
+    background-color: transparent;
+     !important;
+}
+
+.progress-bar--indeterminate:after {
+    background-color: #0076ff !important;
+}
+
+/*ons-progress-bar {
+    display: block;
+    background: #9E9E9E;
+}*/
+
+
+
+
+/*Toolbar*/
+ons-toolbar.toolbar.toolbar--material {
+    background: #b43998;
+}
+
+.center.toolbar__center.toolbar__title.toolbar--material__center {
+    background: #b43998;
+    color: white;
+}
+
+
+.tabbar.ons-tabbar__footer.ons-swiper-tabbar.tabbar--material.tabbar--top {
+    background: #b43998;
+    color: white;
+}
+
+
+
+/*SVG Icon On Toolbar*/
+svg {
+    fill: white;
+}
+
+
+/*Tabber Bottom */
+.tabbar--material__border {
+    height: 2px;
+    background-color: white;
+}
+
+.tabbar__icon {
+    color: white;
+}
+
+/*Fab Style Global*/
+ons-fab.fab.fab--material.fab--bottom__right {
+    background: #2196F3;
+    color: white;
+}
+
+/*Tabber Color And Tabber Color Top*/
+.tabbar__label {
+    color: white;
+}
+
+
+/*Tabber Bottom Style*/
+/*.tabbar:not(.tabbar--top) {
+    padding-bottom: 0;
+    background: #E91E63;
+}*/
+.tabbar:not(.tabbar--top) {
+    padding-bottom: 0;
+    background: radial-gradient(#E91E63, #9C27B0);
+}
+
+
+
+
+
+/*Tabber icon*/
+ons-toolbar-button.toolbar-button.toolbar-button--material {
+    color: white;
+}
+
+
+/*.fa-bookmark:before {
+    content: "\f02e";
+    color: red;
+}*/
+
+.fa-magnet:before {
+    content: "\f076";
+    color: orange;
+}

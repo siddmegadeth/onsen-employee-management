@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script type="text/javascript" src="plugins/OnsenUI-dist-2.10.10/js/onsenui.min.js"></script>
+    <link rel="stylesheet" href="plugins/OnsenUI-dist-2.10.10/css/onsenui.min.css" />
+    <link rel="stylesheet" href="plugins/OnsenUI-dist-2.10.10/css/onsenui-core.min.css" />
+    <link rel="stylesheet" href="plugins/OnsenUI-dist-2.10.10/css/onsen-css-components.min.css" />
+    <!--     <link rel="stylesheet" href="plugins/OnsenUI-dist-2.10.10/css/dark-onsen-css-components.min.css" />
+ -->
+    <link rel="stylesheet" href="plugins/OnsenUI-dist-2.10.10/css/onsenui-fonts.css" />
+    <link rel="stylesheet" href="components/global/onsenui-overwrite.css" />
+    <meta charset=" utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Employee Feedback</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body ng-app="myApp">
+    <ons-navigator swipeable page="login.html" animation="lift" var="myNavigator"></ons-navigator>
+    <!-- Login -->
+    <template id="login.html">
+        <ons-page ng-controller="loginCtrl">
+            <ons-toolbar>
+                <div class="center">Login</div>
+            </ons-toolbar>
+            <ons-progress-bar indeterminate ng-if="loginProgressBar"></ons-progress-bar>
+            <ons-toast var="loginToast">
+                {{loginToastMessage}}<button ng-click="loginToast.hide()">Close</button>
+            </ons-toast>
+            <ons-card>
+                <ons-list-item>
+                    <ons-input placeholder="Username" ng-model="loginCredentials.employeeName" required></ons-input>
+                </ons-list-item>
+                <ons-list-item>
+                    <ons-input type="password" placeholder="Password" ng-model="loginCredentials.password" required></ons-input>
+                </ons-list-item>
+                <ons-list-item>
+                    <ons-button modifier="large" ng-click="validateLogin()">Login</ons-button>
+                </ons-list-item>
+            </ons-card>
+        </ons-page>
+    </template>
+    <!-- manager -->
+    <template id="manager.html">
+        <ons-page ng-controller="managerCtrl">
+            <ons-toolbar>
+                <div class="center">{{employeeState.employeeName}}</div>
+                <div class="left">
+                    <ons-back-button></ons-back-button>
+                </div>
+                <div class="right">
+                    <ons-toolbar-button>
+                        <ons-icon icon="fa-cog"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+            </ons-toolbar>
+            <ons-toast var="managerToast">
+                {{managerToastMessage}}<button ng-click="managerToast.hide()">Close</button>
+            </ons-toast>
+            <ons-progress-bar indeterminate ng-if="managerProgressBar"></ons-progress-bar>
+            <ons-fab position="bottom right" ng-click="openFab()">
+                <ons-icon icon=fa-plus></ons-icon>
+            </ons-fab>
+            <!-- Business UI -->
+            <ons-list-header>List Of All Your Reportee</ons-list-header>
+            <ons-list-item>
+                <ons-search-input ng-model="search" placeholder="Search Employee"></ons-search-input>
+            </ons-list-item>
+            <ons-list ng-repeat="report in allReporteeList">
+                <ons-list-item modifier="chevron" tappable ng-click="openReporteeRating(report)">
+                    {{report.employeeName}}
+                </ons-list-item>
+            </ons-list>
+        </ons-page>
+    </template>
+    <!-- Manager Drill For Reportee . -->
+    <template id="reportee-rating.html">
+        <ons-page ng-controller="reporteeRatingCtrl">
+            <ons-toolbar>
+                <div class="center">Provide Feedback</div>
+                <div class="left">
+                    <ons-back-button></ons-back-button>
+                </div>
+                <div class="right">
+                    <ons-toolbar-button>
+                        <ons-icon icon="fa-trash" ng-click="deleteRating()"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+            </ons-toolbar>
+            <ons-progress-bar indeterminate ng-if="reporteeRatingProgressBar"></ons-progress-bar>
+            <ons-toast var="reporteeRatingToast">
+                {{reporteeRatingToastMessage}}<button ng-click="reporteeRatingToast.hide()">Close</button>
+            </ons-toast>
+            <!-- Business UI below -->
+            <ons-list ng-if="!employeeFeedback">
+                <ons-list-item>
+                    <h3>Could Not Fetch Details</h3>
+                </ons-list-item>
+            </ons-list>
+            <ons-list ng-if="employeeFeedback">
+                <ons-list-item>
+                    <label>
+                        <bold>Employee Name</bold>
+                    </label>
+                    <ons-input placeholder="Employee ID" ng-model="employeeFeedback.employeeName"></ons-input>
+                </ons-list-item>
+                <ons-list-item>
+                    <label>
+                        <bold>Employee Identity Number</bold>
+                    </label>
+                    <ons-input placeholder="Employee ID" ng-model="employeeFeedback.employeeID"></ons-input>
+                </ons-list-item>
+                <ons-list-header>Provide Your Comments</ons-list-header>
+                <li class="list-item">
+                    <div class="list-item__center">
+                        <textarea class="textarea textarea--transparent" placeholder="Comments" ng-model="employeeFeedback.comments"></textarea>
+                    </div>
+                </li>
+                <ons-list-header>Rate Your Self( 1 o 5)</ons-list-header>
+                <ons-list-item>
+                    <ons-row>
+                        <ons-col width="40px" style="text-align: center; line-height: 31px;">
+                            <ons-icon icon="fa-star"></ons-icon>
+                        </ons-col>
+                        <ons-col>
+                            <ons-range style="width: 100%;" ng-model="employeeFeedback.rating" min="1" max="5"></ons-range>
+                        </ons-col>
+                        <ons-col width="40px" style="text-align: center; line-height: 31px;">
+                            {{employeeFeedback.rating}}
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+            </ons-list>
+            <ons-list-header>Manager Rating And Feedback</ons-list-header>
+            <ons-list-item>
+                <ons-row>
+                    <ons-col width="40px" style="text-align: center; line-height: 31px;">
+                        <ons-icon icon="fa-star"></ons-icon>
+                    </ons-col>
+                    <ons-col>
+                        <ons-range style="width: 100%;" ng-model="managerRating" min="1" max="5"></ons-range>
+                    </ons-col>
+                    <ons-col width="40px" style="text-align: center; line-height: 31px;">
+                        {{employeeFeedback.rating}}
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+            <ons-list-header>Manager Comments</ons-list-header>
+            <li class="list-item">
+                <div class="list-item__center">
+                    <textarea class="textarea textarea--transparent" placeholder=" Manager Comments" ng-model="managerComments"></textarea>
+                </div>
+            </li>
+            <ons-list>
+            </ons-list>
+            <ons-list ng-if="employeeFeedback">
+                <ons-list-item>
+                    <ons-button modifier="large" ng-click="editReportee()"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;Edit</ons-button>
+                </ons-list-item>
+                <ons-list-item>
+                    <ons-button modifier="large" ng-click="updateReportee()">
+                        <i class="fa fa-floppy-o" aria-hidden="true"></i>&nbsp;Update</ons-button>
+                </ons-list-item>
+                <ons-list>
+        </ons-page>
+    </template>
+    <!-- Reportee -->
+    <template id="reportee.html">
+        <ons-page ng-controller="reporteeCtrl">
+            <ons-toolbar>
+                <div class="center">{{employeeDetails.employeeName}}</div>
+                <div class="left">
+                    <ons-back-button></ons-back-button>
+                </div>
+                <div class="right">
+                    <ons-toolbar-button>
+                        <ons-icon icon="fa-cog"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+            </ons-toolbar>
+            <ons-progress-bar indeterminate ng-if="reporteeProgressBar"></ons-progress-bar>
+            <ons-toast var="reporteeToast">
+                {{reporteeToastMessage}}<button ng-click="reporteeToast.hide()">Close</button>
+            </ons-toast>
+            <!-- Business UI below -->
+            <ons-list ng-if="!employeeDetails">
+                <ons-list-item>
+                    <h3>Could Not Fetch Details</h3>
+                </ons-list-item>
+            </ons-list>
+            <ons-list ng-if="employeeDetails">
+                <ons-list-item>
+                    <label>
+                        <bold>Employee Name</bold>
+                    </label>
+                    <ons-input placeholder="Employee ID" ng-model="employeeDetails.employeeName"></ons-input>
+                </ons-list-item>
+                <ons-list-item>
+                    <label>
+                        <bold>Employee Identity Number</bold>
+                    </label>
+                    <ons-input placeholder="Employee ID" ng-model="employeeDetails.employeeID"></ons-input>
+                </ons-list-item>
+                <ons-list-header>Provide Your Comments</ons-list-header>
+                <li class="list-item">
+                    <div class="list-item__center">
+                        <textarea class="textarea textarea--transparent" placeholder="Comments" ng-model="employeeDetails.comments"></textarea>
+                    </div>
+                </li>
+            </ons-list>
+            <ons-list-header>Rate Your Self( 1 o 5)</ons-list-header>
+            <ons-list>
+                <ons-list-item>
+                    <ons-row>
+                        <ons-col width="40px" style="text-align: center; line-height: 31px;">
+                            <ons-icon icon="fa-star"></ons-icon>
+                        </ons-col>
+                        <ons-col>
+                            <ons-range style="width: 100%;" ng-model="employeeDetails.rating" min="1" max="5"></ons-range>
+                        </ons-col>
+                        <ons-col width="40px" style="text-align: center; line-height: 31px;">
+                            {{employeeDetails.rating}}
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+                <ons-list-item>
+                    <ons-button modifier="large" ng-click="updateReportee()">Update</ons-button>
+                </ons-list-item>
+                <ons-list>
+        </ons-page>
+    </template>
+</body>
+<script type="text/javascript" src="plugins/angular-1.7.8/angular.min.js"></script>
+<script type="text/javascript" src="plugins/OnsenUI-dist-2.10.10/js/angular-onsenui.js"></script>
+<script type="text/javascript" src="init.js"></script>
+<script type="text/javascript" src="components/ride-creation/rideCreationCtrl.js"></script>
+<script type="text/javascript" src="components/login/loginCtrl.js"></script>
+<script type="text/javascript" src="components/employee-onboard/employeeOnBoardCtrl.js"></script>
+<script type="text/javascript" src="components/reportee/reporteeCtrl.js"></script>
+<script type="text/javascript" src="components/manager/managerCtrl.js"></script>
+<script type="text/javascript" src="components/reportee-rating/reporteeRatingCtrl.js"></script>
+<!-- Services -->
+<script type="text/javascript" src="services/employee-services.js"></script>
+
+</html>

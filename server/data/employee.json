@@ -1,0 +1,42 @@
+[
+    {
+        "employeeName": "Nick",
+        "employeeID": 10010,
+        "project": "management software",
+        "comments": "to good",
+        "rating": 3,
+        "isManager": true
+    },
+    {
+        "employeeName": "john",
+        "employeeID": 10011,
+        "project": "management software",
+        "comments": "to good",
+        "rating": 3,
+        "isManager": false
+    },
+    {
+        "employeeName": "test",
+        "employeeID": 10012,
+        "project": "management software",
+        "comments": "to good",
+        "rating": 3,
+        "isManager": true
+    },
+    {
+        "employeeName": "manager",
+        "employeeID": 10013,
+        "project": "management software",
+        "comments": "to good",
+        "rating": 3,
+        "isManager": true
+    },
+    {
+        "employeeName": "reportee",
+        "employeeID": 10014,
+        "project": "management software",
+        "comments": "to good",
+        "rating": 3,
+        "isManager": false
+    }
+]
